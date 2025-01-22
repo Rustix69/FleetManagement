@@ -9,10 +9,12 @@ const {
 } = require('../controller/vehicleController');
 
 router.post('/', createVehicle);
-router.get('/', getAllVehicles);
-router.get('/:id', getVehicleWithAssignments);
-router.patch('/:id/status', updateVehicleStatus);
 
+router.get('/', getAllVehicles);
+
+router.get('/:id', getVehicleWithAssignments);
+
+router.patch('/:id/status', updateVehicleStatus);
 
 router.get('/:id/availability', getVehicleAvailability);
 

@@ -6,8 +6,19 @@ const vehicleSchema = new mongoose.Schema({
     required: true, 
     unique: true 
   },
-  type: String,
-  model: String,
+  category: { 
+    type: String, 
+    enum: ['vehicle', 'equipment'], 
+    required: true 
+  },
+  type: { 
+    type: String, 
+    required: true 
+  },
+  modelNumber: { 
+    type: String, 
+    required: true 
+  },
   manufacturer: String,
   year: Number,
   assignments: [{

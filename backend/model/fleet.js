@@ -11,33 +11,13 @@ const fleetSchema = new mongoose.Schema({
         required: true
     },
     description: String,
-    inventory: {
-        totalAssets: {
-            type: Number,
-            default: 0
-        },
-        categories: [{
-            type: {
-                type: String,
-                required: true
-            },
-            count: {
-                type: Number,
-                default: 0
-            }
-        }]
-    },
-    classification: {
-        type: {
-            type: String,
-            enum: ['vehicles', 'machinery', 'equipment']
-        },
-        model: String,
-        usageCategory: String
-    },
     assets: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicle'
+    }],
+    assignments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Assignment'
     }],
     status: {
         type: String,
