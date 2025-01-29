@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import AddVehicleToFleet from '../components/UpdateAssetFleet';
+import AddAssignmentToFleet from '../components/UpdateAssignment';
 
 interface Fleet {
   fleetId: string;
   name: string;
-  fleetStatus: string;
+  status: string;
   description: string;
 }
 
@@ -13,9 +15,8 @@ export default function Fleets() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch data from the backend when the component mounts
   useEffect(() => {
-    const fetchFleets = async () => {
+    const fetchAllFleets = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/fleets'); // Adjust URL as needed
         setFleets(response.data.data); // Assuming the response contains an array of fleets
@@ -27,7 +28,7 @@ export default function Fleets() {
       }
     };
 
-    fetchFleets();
+    fetchAllFleets();
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   if (loading) {
@@ -49,11 +50,14 @@ export default function Fleets() {
               <p className="text-lg font-medium dark:text-gray-300">Fleet Name: {fleet.name}</p>
             </div>
             <div className="mt-4 text-sm dark:text-gray-400">
-              <p>Status: {fleet.fleetStatus}</p>
+              <p>Status: {fleet.status}</p>
               <p>{fleet.description}</p>
             </div>
           </div>
         ))}
+
+        <AddVehicleToFleet/>
+        <AddAssignmentToFleet/>
       </div>
     </div>
   );

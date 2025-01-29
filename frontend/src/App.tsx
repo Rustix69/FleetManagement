@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, } from 'react-router-dom';
 import { 
   Car, 
   Truck, 
   CheckSquare, 
   Calendar,
-  ListPlus,
   Heart,
   User,
-  Eye
 } from 'lucide-react';
 import Assets from './pages/Assets';
 import Assignments from './pages/Assignments';
@@ -20,7 +18,6 @@ import FleetForm from './components/AddFleet';
 
 // Main dashboard component
 function Dashboard() {
-  const navigate = useNavigate();
   
   // Sample data for demonstration
   const stats = {
@@ -135,44 +132,5 @@ function StatCard({ icon, title, value }: StatCardProps) {
   );
 }
 
-// Input component
-interface InputProps {
-  label: string;
-  type?: string;
-  placeholder: string;
-}
-
-function Input({ label, type = 'text', placeholder }: InputProps) {
-  return (
-    <div>
-      <label className="block text-sm font-medium mb-2 dark:text-gray-300">{label}</label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        className="w-full px-4 py-2 rounded-lg dark:bg-gray-700 bg-white border dark:border-gray-600 border-gray-300 focus:ring-2 focus:ring-purple-500 dark:text-white"
-      />
-    </div>
-  );
-}
-
-// Select component
-interface SelectProps {
-  label: string;
-  options: string[];
-}
-
-function Select({ label, options }: SelectProps) {
-  return (
-    <div>
-      <label className="block text-sm font-medium mb-2 dark:text-gray-300">{label}</label>
-      <select className="w-full px-4 py-2 rounded-lg dark:bg-gray-700 bg-white border dark:border-gray-600 border-gray-300 focus:ring-2 focus:ring-purple-500 dark:text-white">
-        <option value="">Select {label}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
 
 export default App;
