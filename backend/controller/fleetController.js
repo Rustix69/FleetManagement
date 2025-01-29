@@ -1,17 +1,23 @@
 const Fleet = require('../model/fleet');
 const Vehicle = require('../model/vehicle');
 const Assignment = require('../model/assignment');
+const User = require('../model/user')
 
 // Create Fleet
 exports.createFleet = async (req, res) => {
     try {
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to create a fleet' });
+        }
+        
         const fleet = new Fleet({
             fleetId: req.body.fleetId,
             name: req.body.name,
-            description: req.body.description
+            description: req.body.description,
+            userId: req.user.userId
         });
         await fleet.save();
-        res.status(201).json({ success: true, data: fleet });
+        res.status(201).json({ success: true, data: fleet});
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -40,6 +46,9 @@ exports.getFleetDetails = async (req, res) => {
 // Add Vehicle to Fleet
 exports.addAssetToFleet = async (req, res) => {
     try {
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to create a fleet' });
+        }
         const { fleetId } = req.params;
         const { assetId } = req.body;
 
@@ -67,6 +76,10 @@ exports.addAssetToFleet = async (req, res) => {
 // Add Assignment to Fleet
 exports.addAssignmentToFleet = async (req, res) => {
     try {
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to create a fleet' });
+        }
+
         const { fleetId } = req.params;
         const { assignmentId } = req.body;
 
@@ -94,6 +107,9 @@ exports.addAssignmentToFleet = async (req, res) => {
 // Update Fleet Status
 exports.updateFleetStatus = async (req, res) => {
     try {
+        if (!req.user || req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Forbidden: You do not have permission to create a fleet' });
+        }
         const { fleetId } = req.params;
         const { status } = req.body;
 

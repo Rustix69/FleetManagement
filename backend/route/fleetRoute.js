@@ -8,9 +8,10 @@ const {
   updateFleetStatus,
   addAssignmentToFleet
 } = require('../controller/fleetController');
+const authenticateToken = require('../authMiddleware');
 
 
-router.post('/', createFleet);
+router.post('/',authenticateToken, createFleet);
 
 router.get('/:id', getFleetDetails);
 

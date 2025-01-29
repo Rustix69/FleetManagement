@@ -27,6 +27,10 @@ const fleetSchema = new mongoose.Schema({
     lastUpdated: {
         type: Date,
         default: Date.now
+    },
+    userId : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 

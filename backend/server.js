@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/api/vehicles', require('./route/vehicleRoute'));
 app.use('/api/assignments', require('./route/assignmentRoute'));
 app.use('/api/fleets', require('./route/fleetRoute'));
+app.use('/api/auth', require('./route/authRoute'));  
 
 // Connect to Database
 connectDB();
