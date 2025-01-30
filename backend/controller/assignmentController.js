@@ -39,7 +39,8 @@ exports.createAssignment = async (req, res) => {
             vehicleId: vehicle._id, 
             projectId,
             startDate,
-            endDate
+            endDate,
+            createdBy: req.user.userId
         });
 
        
@@ -106,7 +107,10 @@ exports.updateAssignmentStatus = async (req, res) => {
         const { status } = req.body;
         const { id: assignmentId } = req.params;
 
-       
+        const userId = req.user.userId;
+        const userRole = req.user.role; 
+
+        // Find the assignment by assignmentId
         const assignment = await Assignment.findOne({ assignmentId });
 
         if (!assignment) {
@@ -116,6 +120,15 @@ exports.updateAssignmentStatus = async (req, res) => {
             });
         }
 
+        // Check if the user is the creator or an admin
+        if (assignment.createdBy.toString() !== userId && userRole !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Unauthorized action'
+            });
+        }
+
+        // Update the assignment status
         assignment.status = status;
         await assignment.save();
 
@@ -136,7 +149,10 @@ exports.deleteAssignment = async (req, res) => {
     try {
         const { id: assignmentId } = req.params;
 
+        const userId = req.user.userId;  
+        const userRole = req.user.role;  
 
+        // Find the assignment by assignmentId
         const assignment = await Assignment.findOne({ assignmentId });
 
         if (!assignment) {
@@ -146,14 +162,22 @@ exports.deleteAssignment = async (req, res) => {
             });
         }
 
+        // Check if the user is the creator or an admin
+        if (assignment.createdBy.toString() !== userId && userRole !== 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Unauthorized action'
+            });
+        }
 
+        
         const vehicle = await Vehicle.findById(assignment.vehicleId);
         if (vehicle) {
             vehicle.assignments = vehicle.assignments.filter(
-                (assignmentId) => assignmentId.toString() !== assignment._id.toString()
+                (id) => id.toString() !== assignment._id.toString()
             );
 
-
+            
             if (vehicle.assignments.length === 0) {
                 vehicle.status = 'available';
             }
@@ -161,7 +185,7 @@ exports.deleteAssignment = async (req, res) => {
             await vehicle.save();
         }
 
-
+        
         await Assignment.deleteOne({ _id: assignment._id });
 
         res.status(200).json({

@@ -7,14 +7,15 @@ const {
   getAllVehicles,
   getVehicleAvailability
 } = require('../controller/vehicleController');
+const authenticateToken = require('../authMiddleware');
 
-router.post('/', createVehicle);
+router.post('/',authenticateToken ,createVehicle);
 
 router.get('/', getAllVehicles);
 
 router.get('/:id', getVehicleWithAssignments);
 
-router.patch('/:id/status', updateVehicleStatus);
+router.patch('/:id/status',authenticateToken ,updateVehicleStatus);
 
 router.get('/:id/availability', getVehicleAvailability);
 

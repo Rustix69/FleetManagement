@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 
 const vehicleSchema = new mongoose.Schema({
-  assetId: { 
-    type: String, 
-    required: true, 
-    unique: true 
+  assetId: {
+    type: String,
+    required: true,
+    unique: true
   },
-  category: { 
-    type: String, 
-    enum: ['vehicle', 'equipment'], 
-    required: true 
+  category: {
+    type: String,
+    enum: ['vehicle', 'equipment'],
+    required: true
   },
-  type: { 
-    type: String, 
-    required: true 
+  type: {
+    type: String,
+    required: true
   },
-  modelNumber: { 
-    type: String, 
-    required: true 
+  modelNumber: {
+    type: String,
+    required: true
   },
   manufacturer: String,
   year: Number,
@@ -29,6 +29,10 @@ const vehicleSchema = new mongoose.Schema({
     type: String,
     enum: ['available', 'assigned', 'maintenance'],
     default: 'available'
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 

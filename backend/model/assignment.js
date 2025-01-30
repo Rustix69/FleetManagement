@@ -34,6 +34,10 @@ const assignmentSchema = new mongoose.Schema({
     type: String,
     enum: ['scheduled', 'active', 'completed'],
     default: 'scheduled'
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 

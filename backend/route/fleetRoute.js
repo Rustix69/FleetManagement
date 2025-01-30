@@ -15,11 +15,11 @@ router.post('/',authenticateToken, createFleet);
 
 router.get('/:id', getFleetDetails);
 
-router.post('/:fleetId/assets', addAssetToFleet);
+router.post('/:fleetId/assets',authenticateToken, addAssetToFleet);
 
-router.post('/:fleetId/assignments', addAssignmentToFleet);
+router.post('/:fleetId/assignments',authenticateToken, addAssignmentToFleet);
 
-router.patch('/:fleetId/status', updateFleetStatus);
+router.patch('/:fleetId/status',authenticateToken, updateFleetStatus);
 
 router.get('/', async (req, res) => {
   try {

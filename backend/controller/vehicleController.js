@@ -11,7 +11,8 @@ exports.createVehicle = async (req, res) => {
             modelNumber: req.body.modelNumber,
             manufacturer: req.body.manufacturer,
             year: req.body.year,
-            status: 'available'
+            status: req.body.status,
+            createdBy: req.user.userId
         });
         await vehicle.save();
         res.status(201).json({ success: true, data: vehicle });
@@ -71,21 +72,26 @@ exports.getVehicleWithAssignments = async (req, res) => {
 exports.updateVehicleStatus = async (req, res) => {
     try {
         const { status } = req.body;
+        const userId = req.user.userId;
+        const userRole = req.user.role;  
 
-        // Validate the status field
         if (!['available', 'assigned', 'maintenance'].includes(status)) {
             return res.status(400).json({ success: false, message: 'Invalid status' });
         }
 
-        const vehicle = await Vehicle.findOneAndUpdate(
-            { assetId: req.params.id },
-            { status },
-            { new: true }
-        );
+        const vehicle = await Vehicle.findOne({ assetId: req.params.id });
 
         if (!vehicle) {
             return res.status(404).json({ success: false, message: 'Vehicle not found' });
         }
+
+        // Check if the user is the creator or an admin
+        if (vehicle.createdBy.toString() !== userId && userRole !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Unauthorized action' });
+        }
+
+        vehicle.status = status;
+        await vehicle.save();
 
         res.status(200).json({ success: true, data: vehicle });
     } catch (error) {
@@ -108,7 +114,7 @@ exports.getVehicleAvailability = async (req, res) => {
         res.status(200).json({
             success: true,
             data: {
-                vehicleId: vehicle.assetId,
+                vehicleId: vehicle.assetId, // Extract logged-in user ID
                 status: vehicle.status,
                 isAvailable: vehicle.status === 'available'
             }
